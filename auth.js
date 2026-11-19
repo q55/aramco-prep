@@ -7,15 +7,15 @@ import {getFirestore,doc,getDoc,setDoc} from 'https://www.gstatic.com/firebasejs
 const OWNER='aramcoPrep_owner';
 Object.assign(AR,{
   'Sign in':'تسجيل الدخول','Sign out':'تسجيل الخروج','Continue with Google':'الدخول بحساب Google','or':'أو',
-  'Email':'الإيميل','Password':'كلمة المرور','Create account':'حساب جديد','Forgot password?':'نسيت كلمة المرور؟',
-  'Close':'إغلاق','Sign in to save your progress to your account and continue on any device.':'سجّل دخولك عشان ينحفظ تقدمك في حسابك وتكمل من أي جهاز.',
-  'Sign in to save your progress.':'سجّل دخولك عشان ينحفظ تقدمك.',
-  'Reset link sent. Check your email.':'أرسلنا رابط تغيير كلمة المرور على إيميلك.',
-  'Enter your email first.':'اكتب إيميلك أول.','Wrong email or password.':'الإيميل أو كلمة المرور غلط.',
-  'This email already has an account. Sign in instead.':'هذا الإيميل عنده حساب. سجّل دخول بدال.',
-  'Password must be at least 6 characters.':'كلمة المرور لازم تكون 6 أحرف أو أكثر.',
-  'Enter a valid email.':'اكتب إيميل صحيح.','Something went wrong. Try again.':'صار خطأ. جرّب مرة ثانية.',
-  'Signed in as':'داخل باسم','Loading your progress…':'جاري تحميل تقدمك…'
+  'Email':'البريد الإلكتروني','Password':'كلمة المرور','Create account':'حساب جديد','Forgot password?':'نسيت كلمة المرور؟',
+  'Close':'إغلاق','Sign in to save your progress to your account and continue on any device.':'سجّل دخولك لحفظ تقدمك في حسابك والمتابعة من أي جهاز.',
+  'Sign in to save your progress.':'سجّل دخولك لحفظ تقدمك.',
+  'Reset link sent. Check your email.':'أرسلنا رابط تغيير كلمة المرور إلى بريدك الإلكتروني.',
+  'Enter your email first.':'اكتب بريدك الإلكتروني أولاً.','Wrong email or password.':'البريد الإلكتروني أو كلمة المرور غير صحيحة.',
+  'This email already has an account. Sign in instead.':'لهذا البريد حساب مسجّل. سجّل الدخول بدلاً من ذلك.',
+  'Password must be at least 6 characters.':'يجب أن تكون كلمة المرور 6 أحرف أو أكثر.',
+  'Enter a valid email.':'اكتب بريداً إلكترونياً صحيحاً.','Something went wrong. Try again.':'حدث خطأ. حاول مرة أخرى.',
+  'Signed in as':'مسجّل الدخول باسم','Loading your progress…':'جارٍ تحميل تقدمك…'
 });
 
 const app=initializeApp(window.FB_CONFIG),auth=getAuth(app),fdb=getFirestore(app);

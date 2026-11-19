@@ -9,7 +9,7 @@ Object.assign(AR,{
   'Sign in':'تسجيل الدخول','Sign out':'تسجيل الخروج','Continue with Google':'الدخول بحساب Google','or':'أو',
   'Email':'الإيميل','Password':'كلمة المرور','Create account':'حساب جديد','Forgot password?':'نسيت كلمة المرور؟',
   'Close':'إغلاق','Sign in to save your progress to your account and continue on any device.':'سجّل دخولك عشان ينحفظ تقدمك في حسابك وتكمل من أي جهاز.',
-  'Saved on this device only. Sign in to save to your account.':'محفوظ على هذا الجهاز فقط. سجّل دخولك عشان ينحفظ تقدمك في حسابك.',
+  'Sign in to save your progress.':'سجّل دخولك عشان ينحفظ تقدمك.',
   'Reset link sent. Check your email.':'أرسلنا رابط تغيير كلمة المرور على إيميلك.',
   'Enter your email first.':'اكتب إيميلك أول.','Wrong email or password.':'الإيميل أو كلمة المرور غلط.',
   'This email already has an account. Sign in instead.':'هذا الإيميل عنده حساب. سجّل دخول بدال.',
@@ -86,13 +86,13 @@ dlg.querySelector('#adPw').addEventListener('keydown',e=>{if(e.key==='Enter'){e.
 // ---- sync ----
 function fresh(){return {saved:{num:[],ver:[],ind:[]},hist:{num:{},ver:{},ind:{}},prog:{},lim:{},t:0,srs:{},time:{},notes:{},prefs:STATE.prefs||{}};}
 function redraw(){try{refreshHome();rerenderAll();}catch(e){}}
-syncMsg='Saved on this device only. Sign in to save to your account.';paintSync();L();
+syncMsg='Sign in to save your progress.';paintSync();L();
 onAuthStateChanged(auth,async u=>{
   if(!u){
     cloudDoc=null;
     if(localStorage.getItem(OWNER)){ // was signed in: clear that person's data from this device
       localStorage.removeItem(OWNER);STATE=fresh();try{localStorage.setItem(LSK,JSON.stringify(STATE))}catch(e){}redraw();}
-    syncMsg='Saved on this device only. Sign in to save to your account.';paintSync();paintBtn();return;}
+    syncMsg='Sign in to save your progress.';paintSync();paintBtn();return;}
   syncMsg='Loading your progress…';paintSync();paintBtn();
   const owner=localStorage.getItem(OWNER);
   if(owner&&owner!==u.uid)STATE=fresh(); // another account's leftovers

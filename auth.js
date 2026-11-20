@@ -15,7 +15,7 @@ Object.assign(AR,{
   'This email already has an account. Sign in instead.':'لهذا البريد حساب مسجّل. سجّل الدخول بدلاً من ذلك.',
   'Password must be at least 6 characters.':'يجب أن تكون كلمة المرور 6 أحرف أو أكثر.',
   'Enter a valid email.':'اكتب بريداً إلكترونياً صحيحاً.','Something went wrong. Try again.':'حدث خطأ. حاول مرة أخرى.',
-  'Signed in as':'مسجّل الدخول باسم','Loading your progress…':'جارٍ تحميل تقدمك…'
+  'Sign in before you practise':'سجّل دخولك قبل التدريب','Continue without signing in':'متابعة بدون تسجيل','Signed in as':'مسجّل الدخول باسم','Loading your progress…':'جارٍ تحميل تقدمك…'
 });
 
 const app=initializeApp(window.FB_CONFIG),auth=getAuth(app),fdb=getFirestore(app);
@@ -37,6 +37,7 @@ dlg.innerHTML=`<form method="dialog" class="ad" novalidate>
   <p class="aderr" id="adErr" role="alert"></p>
   <div class="adrow"><button type="button" class="hbtn hpri" data-act="in" data-a="Sign in"></button><button type="button" class="hbtn" data-act="new" data-a="Create account"></button></div>
   <button type="button" class="adlink" data-act="reset" data-a="Forgot password?"></button>
+  <button type="button" class="hbtn adskip" data-act="skip" data-a="Continue without signing in" hidden></button>
  </div></form>`;
 document.body.append(dlg);
 const st=document.createElement('style');st.textContent=`
@@ -55,6 +56,7 @@ const st=document.createElement('style');st.textContent=`
 .adrow{display:grid;grid-template-columns:1fr 1fr;gap:8px}.adrow .hbtn{padding:10px}
 .aderr{margin:0;min-height:0;color:#e5534b;font-size:13px}.aderr:empty{display:none}
 :root[data-theme=dark] #authDlg .hpri{color:#06201c}
+.adskip{margin-top:4px;background:transparent!important;color:var(--muted)!important}.adskip[hidden]{display:none}
 .adlink{background:none;border:0;color:var(--accent);font:500 13px var(--font);cursor:pointer;padding:0;align-self:flex-start}`;
 document.head.append(st);
 
@@ -63,14 +65,17 @@ function paintBtn(){const u=auth.currentUser;btn.textContent=u?(u.displayName?u.
 function err(m){dlg.querySelector('#adErr').textContent=m?t(m):'';}
 const _rr=window.rerenderAll;window.rerenderAll=function(){_rr&&_rr();L();};
 const _tl=window.toggleLang;window.toggleLang=function(){_tl();L();};
-btn.onclick=()=>{err('');const u=auth.currentUser;dlg.querySelector('.adin').hidden=!u;dlg.querySelector('.adout').hidden=!!u;
-  dlg.querySelector('h2').textContent=t(u?'Signed in as':'Sign in');dlg.querySelector('h2+.adp').hidden=!!u;if(u)dlg.querySelector('#adWho').textContent=u.email||u.displayName||'';dlg.showModal();};
+function openDlg(prompt){err('');const u=auth.currentUser;dlg.querySelector('.adskip').hidden=!prompt;dlg.querySelector('.adin').hidden=!u;dlg.querySelector('.adout').hidden=!!u;
+  dlg.querySelector('h2').textContent=t(u?'Signed in as':prompt?'Sign in before you practise':'Sign in');dlg.querySelector('h2+.adp').hidden=!!u;if(u)dlg.querySelector('#adWho').textContent=u.email||u.displayName||'';if(!dlg.open)dlg.showModal();}
+btn.onclick=()=>openDlg(false);
+const SKIP='aramcoPrep_skipSignin';
+const _gh=window.goHome;window.goHome=async function(){_gh();try{await auth.authStateReady();}catch(e){}if(!auth.currentUser&&!sessionStorage.getItem(SKIP)&&document.body.dataset.screen==='home')openDlg(true);};
 const MSG={'auth/invalid-credential':'Wrong email or password.','auth/wrong-password':'Wrong email or password.','auth/user-not-found':'Wrong email or password.',
  'auth/email-already-in-use':'This email already has an account. Sign in instead.','auth/weak-password':'Password must be at least 6 characters.',
  'auth/invalid-email':'Enter a valid email.','auth/missing-password':'Password must be at least 6 characters.'};
 dlg.addEventListener('click',async e=>{
   const a=e.target.closest('[data-act]')?.dataset.act;if(!a)return;
-  if(a==='close')return dlg.close();
+  if(a==='close'||a==='skip'){if(!dlg.querySelector('.adskip').hidden)sessionStorage.setItem(SKIP,'1');return dlg.close();}
   const em=dlg.querySelector('#adEm').value.trim(),pw=dlg.querySelector('#adPw').value;err('');
   try{
     if(a==='google')await signInWithPopup(auth,new GoogleAuthProvider());
